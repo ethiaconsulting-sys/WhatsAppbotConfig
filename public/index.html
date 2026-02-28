@@ -2,71 +2,345 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuracio del bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WhatsApp Bot · Configuració</title>
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css" />
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="app-shell">
 
-    <!-- LOGIN -->
-    <section id="loginCard" class="login-wrap">
-      <div class="login-box card">
-        <h2 class="login-title">Accés a configuració</h2>
-        <div class="login-fields">
-          <label>
-            Usuari
-            <input id="username" type="text" autocomplete="username" placeholder="usuari" />
-          </label>
-          <label>
-            Contrasenya
-            <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+<!-- ══════════════════════ LOGIN ══════════════════════ -->
+<div id="loginView" class="login-view">
+  <div class="login-card">
+    <div class="login-logo">⚙</div>
+    <h1 class="login-title">Accés a configuració</h1>
+    <div class="login-fields">
+      <label class="field-label">
+        Usuari
+        <input id="loginUser" type="text" autocomplete="username" placeholder="nom d'usuari" />
+      </label>
+      <label class="field-label">
+        Contrasenya
+        <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" />
+      </label>
+    </div>
+    <button id="loginBtn" class="btn-primary btn-block">Entrar</button>
+    <p id="loginErr" class="error-text"></p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ EDITOR ══════════════════════ -->
+<div id="editorView" class="editor-view hidden">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1 class="app-title">Configuració del bot</h1>
+    </div>
+    <div class="topbar-right">
+      <span id="whoami" class="user-chip"></span>
+      <button id="reloadBtn" class="btn-ghost">↺&nbsp;Reload</button>
+      <button id="logoutBtn" class="btn-ghost">Logout</button>
+    </div>
+  </header>
+
+  <div class="editor-body">
+
+    <!-- Record selector -->
+    <div class="record-bar card">
+      <label class="field-label">
+        Registre actiu
+        <select id="recordSelect"></select>
+      </label>
+    </div>
+
+    <!-- ─────────────── 1. Configuració bàsica ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Configuració bàsica</h2>
+      <div class="grid cols-4">
+
+        <div class="field">
+          <label class="field-label">Environment
+            <input data-field="env" type="text" />
           </label>
         </div>
-        <div class="login-footer">
-          <button id="loginBtn" type="button">Entrar</button>
-          <p id="loginError" class="error"></p>
+
+        <div class="field">
+          <label class="field-label">Bot ID
+            <input data-field="bot_id" type="text" />
+          </label>
         </div>
+
+        <div class="field span-2">
+          <label class="field-label">Created at
+            <input data-field="created_at" type="text" disabled />
+          </label>
+        </div>
+
       </div>
     </section>
 
-    <!-- EDITOR -->
-    <section id="editorCard" class="hidden">
 
-      <!-- Capçalera principal -->
-      <header class="page-header">
-        <div class="page-header__left">
-          <h1 class="page-title">Configuració del bot</h1>
-          <button id="reloadBtn" type="button" class="btn-secondary">Reload</button>
+    <!-- ─────────────── 2. Detecció d'idioma ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Detecció d'idioma</h2>
+      <div class="grid cols-4">
+
+        <div class="field span-2">
+          <label class="field-label">
+            Language Rules <span class="badge-json">JSON</span>
+            <textarea data-field="language_rules" data-json data-cm-height="185"></textarea>
+          </label>
         </div>
-        <div class="page-header__right">
-          <span id="whoami" class="whoami"></span>
-          <button id="logoutBtn" type="button" class="btn-secondary">Logout</button>
+
+        <div class="field span-2 col-stack">
+          <div class="field">
+            <label class="field-label">Language Confidence (0–1)
+              <input data-field="language_confidence" type="number" step="0.01" min="0" max="1" />
+            </label>
+          </div>
+          <div class="field flex-grow">
+            <label class="field-label">LLM Prompt Language Detector
+              <textarea data-field="llm_prompt_language_detector" class="textarea-auto"></textarea>
+            </label>
+          </div>
         </div>
-      </header>
 
-      <!-- Selector de registre -->
-      <div class="record-bar card">
-        <label class="record-label">
-          Registre
-          <select id="recordSelect"></select>
-        </label>
       </div>
-
-      <!-- Formulari dinàmic -->
-      <div class="form-wrap card">
-        <form id="configForm" class="form-grid"></form>
-      </div>
-
-      <!-- Peu -->
-      <footer class="page-footer">
-        <p id="status" class="status-msg"></p>
-        <button id="saveBtn" type="button" class="btn-primary">Save All</button>
-      </footer>
-
     </section>
-  </main>
 
-  <script src="app.js"></script>
+
+    <!-- ─────────────── 3. Configuració LLM ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Configuració LLM</h2>
+      <div class="grid cols-4">
+
+        <div class="field span-2">
+          <label class="field-label">LLM Get Language
+            <input data-field="llm_get_language" type="text" />
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">LLM Get Response
+            <input data-field="llm_get_response" type="text" />
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Response Temperature
+            <input data-field="llm_get_response_temperature" type="number" step="0.1" min="0" max="2" />
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Tipus Resposta
+            <input data-field="tipus_resposta" type="number" step="1" min="0" />
+          </label>
+        </div>
+
+        <div class="field span-4">
+          <label class="field-label">
+            LLM Prompt Return Schema <span class="badge-json">JSON</span>
+            <textarea data-field="llm_prompt_return_schema" data-json data-cm-height="130"></textarea>
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────── 4. Structured Output Parsers ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Structured Output Parsers</h2>
+      <div class="grid cols-4">
+
+        <div class="field">
+          <label class="field-label">
+            Parser 0 <span class="badge-json">JSON</span>
+            <textarea data-field="json_structured_output_parser_0" data-json data-cm-height="200"></textarea>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">
+            Parser 1 <span class="badge-json">JSON</span>
+            <textarea data-field="json_structured_output_parser_1" data-json data-cm-height="200"></textarea>
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">
+            Parser 2 <span class="badge-json">JSON</span>
+            <textarea data-field="json_structured_output_parser_2" data-json data-cm-height="200"></textarea>
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────── 5. Prompts de sistema ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Prompts de sistema</h2>
+      <div class="grid cols-4">
+
+        <div class="field span-2">
+          <label class="field-label">Prompt System (CA)
+            <textarea data-field="prompt_system_message_ca" class="textarea-prompt"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">Prompt System (ES)
+            <textarea data-field="prompt_system_message_es" class="textarea-prompt"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">Prompt System (FR)
+            <textarea data-field="prompt_system_message_fr" class="textarea-prompt"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">Prompt System (EN)
+            <textarea data-field="prompt_system_message_en" class="textarea-prompt"></textarea>
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────── 6. Templates d'usuari ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Templates d'usuari</h2>
+      <div class="grid cols-4">
+
+        <div class="field span-2">
+          <label class="field-label">
+            User Prompt Template (CA) <span class="badge-json">JSON</span>
+            <textarea data-field="user_prompt_templates_ca" data-json data-cm-height="160"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            User Prompt Template (ES) <span class="badge-json">JSON</span>
+            <textarea data-field="user_prompt_templates_es" data-json data-cm-height="160"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            User Prompt Template (FR) <span class="badge-json">JSON</span>
+            <textarea data-field="user_prompt_templates_fr" data-json data-cm-height="160"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            User Prompt Template (EN) <span class="badge-json">JSON</span>
+            <textarea data-field="user_prompt_templates_en" data-json data-cm-height="160"></textarea>
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────── 7. Vector DB ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Vector DB</h2>
+      <div class="grid cols-4">
+
+        <div class="field">
+          <label class="field-label">DB Vectorial Collection
+            <input data-field="db_vectorial_collection" type="text" />
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">Embeddings Model Name
+            <input data-field="embeddings_model_name" type="text" />
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Qdrant Top K
+            <input data-field="qdrant_top_k" type="number" step="1" min="1" />
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────── 8. Configuració WhatsApp ─────────────── -->
+    <section class="config-section card">
+      <h2 class="section-title">Configuració WhatsApp</h2>
+      <div class="grid cols-4">
+
+        <div class="field span-2">
+          <label class="field-label">WhatsApp Max Chars
+            <input data-field="whatsapp_max_chars" type="number" step="1" min="1" />
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">WhatsApp Send Delay (seconds)
+            <input data-field="whatsapp_send_delay_seconds" type="number" step="1" min="0" />
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            WhatsApp Labels (CA) <span class="badge-json">JSON</span>
+            <textarea data-field="whatsapp_labels_ca" data-json data-cm-height="150"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            WhatsApp Labels (ES) <span class="badge-json">JSON</span>
+            <textarea data-field="whatsapp_labels_es" data-json data-cm-height="150"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            WhatsApp Labels (FR) <span class="badge-json">JSON</span>
+            <textarea data-field="whatsapp_labels_fr" data-json data-cm-height="150"></textarea>
+          </label>
+        </div>
+
+        <div class="field span-2">
+          <label class="field-label">
+            WhatsApp Labels (EN) <span class="badge-json">JSON</span>
+            <textarea data-field="whatsapp_labels_en" data-json data-cm-height="150"></textarea>
+          </label>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /editor-body -->
+
+  <!-- Sticky save bar -->
+  <div class="save-bar">
+    <p id="statusMsg" class="status-msg"></p>
+    <button id="saveBtn" class="btn-primary">Desar tots els canvis</button>
+  </div>
+
+</div><!-- /editorView -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
