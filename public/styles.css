@@ -1,81 +1,290 @@
-﻿:root {
-  --bg: #efefef;
-  --card: #f3f3f3;
-  --text: #171717;
-  --muted: #595959;
-  --border: #cfcfcf;
-  --accent: #3b6ee8;
-  --danger: #b91c1c;
+/* ─────────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────────── */
+:root {
+  --bg:          #f0f0f0;
+  --surface:     #ffffff;
+  --surface-2:   #f7f7f7;
+  --border:      #e0e0e0;
+  --border-strong: #c8c8c8;
+  --text:        #1a1a1a;
+  --text-muted:  #6b6b6b;
+  --text-label:  #3a3a3a;
+  --accent:      #2563eb;
+  --accent-hover:#1d4ed8;
+  --btn-sec-bg:  #e8edf8;
+  --btn-sec-text:#2563eb;
+  --danger:      #b91c1c;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-card: 0 1px 4px rgba(0,0,0,.08);
 }
-* { box-sizing: border-box; }
+
+/* ─────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  margin: 0;
-  font-family: Segoe UI, Arial, sans-serif;
-  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 13px;
   background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
 }
-.app-shell { max-width: 980px; margin: 6px auto; padding: 0 8px 20px; }
+
+.hidden { display: none !important; }
+
+/* ─────────────────────────────────────────────
+   CARD
+───────────────────────────────────────────── */
 .card {
-  background: var(--card);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 10px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
 }
-.hidden { display: none; }
-label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 600; }
-input, select, textarea {
-  width: 100%;
-  margin-top: 4px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 5px 7px;
-  background: #f6f6f6;
-  font-size: 11px;
-}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+───────────────────────────────────────────── */
 button {
-  border: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 16px;
+  transition: background .15s, box-shadow .15s;
+}
+.btn-primary {
   background: var(--accent);
   color: #fff;
-  border-radius: 2px;
-  padding: 4px 12px;
-  min-width: 92px;
-  font-size: 10px;
-  font-weight: 600;
-  cursor: pointer;
 }
-.app-title { margin-bottom: 8px; }
-.app-title h1 { margin: 0; font-size: 34px; line-height: 1; }
-.topbar { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding-bottom: 6px; }
-.topbar p { margin: 0; font-size: 12px; color: var(--muted); }
-.actions { display: flex; gap: 8px; }
-.editor-layout > .card { margin-top: 8px; }
-.record-bar { padding-bottom: 4px; }
+.btn-primary:hover { background: var(--accent-hover); box-shadow: 0 2px 6px rgba(37,99,235,.3); }
 
-/* Dynamic form laid out to match section screenshots */
+.btn-secondary {
+  background: var(--btn-sec-bg);
+  color: var(--btn-sec-text);
+  border: 1px solid #c5d3f5;
+}
+.btn-secondary:hover { background: #dce6fb; }
+
+/* fallback for dynamically-created buttons inside form */
+#saveBtn { background: var(--accent); color: #fff; padding: 7px 22px; font-size: 13px; }
+#saveBtn:hover { background: var(--accent-hover); }
+#loginBtn { background: var(--accent); color: #fff; padding: 7px 22px; font-size: 13px; }
+#loginBtn:hover { background: var(--accent-hover); }
+
+/* ─────────────────────────────────────────────
+   INPUTS
+───────────────────────────────────────────── */
+input, select, textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(37,99,235,.12);
+  background: #fff;
+}
+input[disabled] {
+  background: #f0f0f0;
+  color: var(--text-muted);
+  cursor: default;
+}
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b6b6b'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+textarea {
+  min-height: 140px;
+  font-family: "Cascadia Code", "Fira Code", Consolas, "Courier New", monospace;
+  font-size: 11.5px;
+  line-height: 1.6;
+  resize: vertical;
+  background: #fafcff;
+  border-color: #cdd9f0;
+}
+textarea:focus {
+  background: #fff;
+}
+
+/* ─────────────────────────────────────────────
+   LABELS
+───────────────────────────────────────────── */
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-label);
+  letter-spacing: .01em;
+}
+label > input,
+label > select,
+label > textarea {
+  margin-top: 5px;
+}
+
+/* ─────────────────────────────────────────────
+   APP SHELL
+───────────────────────────────────────────── */
+.app-shell {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─────────────────────────────────────────────
+   LOGIN
+───────────────────────────────────────────── */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-box {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+}
+.login-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.login-fields {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.login-footer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.error {
+  font-size: 12px;
+  color: var(--danger);
+}
+
+/* ─────────────────────────────────────────────
+   PAGE HEADER
+───────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0 8px;
+}
+.page-header__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.page-header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.page-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  color: var(--text);
+}
+.whoami {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────────
+   RECORD BAR
+───────────────────────────────────────────── */
+.record-bar {
+  padding: 12px 16px;
+}
+.record-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-label);
+}
+.record-label select {
+  margin-top: 5px;
+  max-width: 360px;
+}
+
+/* ─────────────────────────────────────────────
+   FORM WRAP
+───────────────────────────────────────────── */
+.form-wrap {
+  padding: 0 0 24px;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   FORM GRID  (dynamically built by app.js)
+───────────────────────────────────────────── */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
+  padding: 0 16px;
 }
+
+/* ─── Individual field card ─── */
 .form-field {
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 8px;
-  background: #f3f3f3;
+  border-radius: var(--radius-sm);
+  padding: 10px;
   position: relative;
 }
 .form-field h4 {
-  margin: 0 0 6px;
-  font-size: 10px;
-  color: #2d2d2d;
+  font-size: 10.5px;
   font-weight: 700;
-  text-transform: none;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 7px;
 }
-textarea { min-height: 72px; font-family: Consolas, "Courier New", monospace; }
+
+/* hide id field */
 .form-field:has([data-field="id"]) { display: none; }
 
-/* Section headers */
-.form-field:has([data-field="env"]) { margin-top: 26px; }
+/* ─── Section header band ─── */
+.form-field:has([data-field="env"]),
+.form-field:has([data-field="language_rules"]),
+.form-field:has([data-field="llm_get_language"]),
+.form-field:has([data-field="json_structured_output_parser_0"]),
+.form-field:has([data-field="prompt_system_message_ca"]),
+.form-field:has([data-field="user_prompt_templates_ca"]),
+.form-field:has([data-field="db_vectorial_collection"]),
+.form-field:has([data-field="whatsapp_max_chars"]) {
+  margin-top: 48px;
+}
+
 .form-field:has([data-field="env"])::before,
 .form-field:has([data-field="language_rules"])::before,
 .form-field:has([data-field="llm_get_language"])::before,
@@ -84,73 +293,127 @@ textarea { min-height: 72px; font-family: Consolas, "Courier New", monospace; }
 .form-field:has([data-field="user_prompt_templates_ca"])::before,
 .form-field:has([data-field="db_vectorial_collection"])::before,
 .form-field:has([data-field="whatsapp_max_chars"])::before {
+  content: "";
   position: absolute;
-  left: -1px;
-  right: -1px;
-  top: -28px;
-  padding: 6px 10px 4px;
-  border: 1px solid var(--border);
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  background: var(--card);
-  font-size: 28px;
+  left: -17px;      /* bleeds to padding edge of form-wrap */
+  right: -17px;
+  top: -49px;
+  height: 48px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 4px 8px;
+  font-size: 18px;
   font-weight: 800;
-  color: #1d1d1d;
+  color: var(--text);
+  letter-spacing: -.01em;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
 }
-.form-field:has([data-field="env"])::before { content: "Configuracio basica"; }
-.form-field:has([data-field="language_rules"])::before { content: "Deteccio d'idioma"; }
-.form-field:has([data-field="llm_get_language"])::before { content: "Configuracio LLM"; }
+
+/* First section has no top border */
+.form-field:has([data-field="env"])::before {
+  border-top: none;
+  background: transparent;
+  top: -44px;
+  height: 44px;
+}
+
+/* Section labels */
+.form-field:has([data-field="env"])::before                       { content: "Configuració bàsica"; }
+.form-field:has([data-field="language_rules"])::before            { content: "Detecció d'idioma"; }
+.form-field:has([data-field="llm_get_language"])::before          { content: "Configuració LLM"; }
 .form-field:has([data-field="json_structured_output_parser_0"])::before { content: "Structured Output Parsers"; }
-.form-field:has([data-field="prompt_system_message_ca"])::before { content: "Prompts de sistema"; }
-.form-field:has([data-field="user_prompt_templates_ca"])::before { content: "Templates d'usuari"; }
-.form-field:has([data-field="db_vectorial_collection"])::before { content: "Vector DB"; }
-.form-field:has([data-field="whatsapp_max_chars"])::before { content: "Configuracio WhatsApp"; }
+.form-field:has([data-field="prompt_system_message_ca"])::before  { content: "Prompts de sistema"; }
+.form-field:has([data-field="user_prompt_templates_ca"])::before  { content: "Templates d'usuari"; }
+.form-field:has([data-field="db_vectorial_collection"])::before   { content: "Vector DB"; }
+.form-field:has([data-field="whatsapp_max_chars"])::before        { content: "Configuració WhatsApp"; }
 
-/* Grid placement by field */
-.form-field:has([data-field="env"]) { grid-column: 1 / 2; }
-.form-field:has([data-field="bot_id"]) { grid-column: 2 / 3; }
-.form-field:has([data-field="created_at"]) { grid-column: 3 / 5; }
+/* ─── Grid column assignments ─── */
+.form-field:has([data-field="env"])          { grid-column: 1 / 2; }
+.form-field:has([data-field="bot_id"])       { grid-column: 2 / 3; }
+.form-field:has([data-field="created_at"])   { grid-column: 3 / 5; }
 
-.form-field:has([data-field="language_rules"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="language_confidence"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="llm_prompt_language_detector"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="language_rules"])             { grid-column: 1 / 3; }
+.form-field:has([data-field="language_confidence"])        { grid-column: 3 / 5; }
+.form-field:has([data-field="llm_prompt_language_detector"]){ grid-column: 3 / 5; }
 
-.form-field:has([data-field="llm_get_language"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="llm_get_response"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="llm_get_response_temperature"]) { grid-column: 1 / 2; }
-.form-field:has([data-field="tipus_resposta"]) { grid-column: 2 / 3; }
-.form-field:has([data-field="llm_prompt_return_schema"]) { grid-column: 1 / 5; }
+.form-field:has([data-field="llm_get_language"])           { grid-column: 1 / 3; }
+.form-field:has([data-field="llm_get_response"])           { grid-column: 3 / 5; }
+.form-field:has([data-field="llm_get_response_temperature"]){ grid-column: 1 / 2; }
+.form-field:has([data-field="tipus_resposta"])             { grid-column: 2 / 3; }
+.form-field:has([data-field="llm_prompt_return_schema"])   { grid-column: 1 / 5; }
 
 .form-field:has([data-field="json_structured_output_parser_0"]) { grid-column: 1 / 2; }
 .form-field:has([data-field="json_structured_output_parser_1"]) { grid-column: 2 / 3; }
 .form-field:has([data-field="json_structured_output_parser_2"]) { grid-column: 3 / 4; }
 
-.form-field:has([data-field="prompt_system_message_ca"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="prompt_system_message_es"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="prompt_system_message_fr"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="prompt_system_message_en"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="prompt_system_message_ca"])   { grid-column: 1 / 3; }
+.form-field:has([data-field="prompt_system_message_es"])   { grid-column: 3 / 5; }
+.form-field:has([data-field="prompt_system_message_fr"])   { grid-column: 1 / 3; }
+.form-field:has([data-field="prompt_system_message_en"])   { grid-column: 3 / 5; }
 
-.form-field:has([data-field="user_prompt_templates_ca"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="user_prompt_templates_es"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="user_prompt_templates_fr"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="user_prompt_templates_en"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="user_prompt_templates_ca"])   { grid-column: 1 / 3; }
+.form-field:has([data-field="user_prompt_templates_es"])   { grid-column: 3 / 5; }
+.form-field:has([data-field="user_prompt_templates_fr"])   { grid-column: 1 / 3; }
+.form-field:has([data-field="user_prompt_templates_en"])   { grid-column: 3 / 5; }
 
-.form-field:has([data-field="db_vectorial_collection"]) { grid-column: 1 / 2; }
-.form-field:has([data-field="embeddings_model_name"]) { grid-column: 2 / 4; }
-.form-field:has([data-field="qdrant_top_k"]) { grid-column: 4 / 5; }
+.form-field:has([data-field="db_vectorial_collection"])    { grid-column: 1 / 2; }
+.form-field:has([data-field="embeddings_model_name"])      { grid-column: 2 / 4; }
+.form-field:has([data-field="qdrant_top_k"])               { grid-column: 4 / 5; }
 
-.form-field:has([data-field="whatsapp_max_chars"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="whatsapp_send_delay_seconds"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="whatsapp_labels_ca"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="whatsapp_labels_es"]) { grid-column: 3 / 5; }
-.form-field:has([data-field="whatsapp_labels_fr"]) { grid-column: 1 / 3; }
-.form-field:has([data-field="whatsapp_labels_en"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="whatsapp_max_chars"])         { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_send_delay_seconds"]){ grid-column: 3 / 5; }
+.form-field:has([data-field="whatsapp_labels_ca"])         { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_labels_es"])         { grid-column: 3 / 5; }
+.form-field:has([data-field="whatsapp_labels_fr"])         { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_labels_en"])         { grid-column: 3 / 5; }
 
-.error { color: var(--danger); }
-#status { color: var(--muted); margin: 8px 0 0; font-size: 11px; }
-.footer-actions { margin-top: 8px; display: flex; justify-content: flex-end; }
+/* number inputs: narrower appearance */
+.form-field:has([data-field="language_confidence"]) input,
+.form-field:has([data-field="llm_get_response_temperature"]) input,
+.form-field:has([data-field="tipus_resposta"]) input,
+.form-field:has([data-field="qdrant_top_k"]) input,
+.form-field:has([data-field="whatsapp_max_chars"]) input,
+.form-field:has([data-field="whatsapp_send_delay_seconds"]) input {
+  max-width: 120px;
+}
 
-@media (max-width: 980px) {
+/* ─────────────────────────────────────────────
+   PAGE FOOTER
+───────────────────────────────────────────── */
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 4px 0;
+}
+.status-msg {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-right: auto;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 860px) {
   .form-grid { grid-template-columns: 1fr 1fr; }
   .form-field { grid-column: 1 / -1 !important; }
+  .form-field:has([data-field="env"])::before,
+  .form-field:has([data-field="language_rules"])::before,
+  .form-field:has([data-field="llm_get_language"])::before,
+  .form-field:has([data-field="json_structured_output_parser_0"])::before,
+  .form-field:has([data-field="prompt_system_message_ca"])::before,
+  .form-field:has([data-field="user_prompt_templates_ca"])::before,
+  .form-field:has([data-field="db_vectorial_collection"])::before,
+  .form-field:has([data-field="whatsapp_max_chars"])::before {
+    left: -13px;
+    right: -13px;
+  }
+}
+
+@media (max-width: 540px) {
+  .page-title { font-size: 22px; }
+  .page-header { flex-direction: column; align-items: flex-start; }
 }

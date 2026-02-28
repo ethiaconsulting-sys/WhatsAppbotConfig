@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
@@ -8,58 +8,65 @@
 </head>
 <body>
   <main class="app-shell">
-    <header class="card app-title">
-      <h1>Configuracio del bot</h1>
-    </header>
 
-    <section id="loginCard" class="card">
-      <header>
-        <h2>Acces a configuracio</h2>
-      </header>
-      <div class="form-grid">
-        <label>
-          Usuari
-          <input id="username" type="text" autocomplete="username" />
-        </label>
-        <label>
-          Password
-          <input id="password" type="password" autocomplete="current-password" />
-        </label>
+    <!-- LOGIN -->
+    <section id="loginCard" class="login-wrap">
+      <div class="login-box card">
+        <h2 class="login-title">Accés a configuració</h2>
+        <div class="login-fields">
+          <label>
+            Usuari
+            <input id="username" type="text" autocomplete="username" placeholder="usuari" />
+          </label>
+          <label>
+            Contrasenya
+            <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+          </label>
+        </div>
+        <div class="login-footer">
+          <button id="loginBtn" type="button">Entrar</button>
+          <p id="loginError" class="error"></p>
+        </div>
       </div>
-      <div class="footer-actions">
-        <button id="loginBtn" type="button">Login</button>
-      </div>
-      <p id="loginError" class="error"></p>
     </section>
 
-    <section id="editorCard" class="card hidden editor-layout">
-      <header class="topbar">
-        <p id="whoami"></p>
-        <div class="actions">
-          <button id="reloadBtn" type="button">Reload</button>
-          <button id="logoutBtn" type="button">Logout</button>
+    <!-- EDITOR -->
+    <section id="editorCard" class="hidden">
+
+      <!-- Capçalera principal -->
+      <header class="page-header">
+        <div class="page-header__left">
+          <h1 class="page-title">Configuració del bot</h1>
+          <button id="reloadBtn" type="button" class="btn-secondary">Reload</button>
+        </div>
+        <div class="page-header__right">
+          <span id="whoami" class="whoami"></span>
+          <button id="logoutBtn" type="button" class="btn-secondary">Logout</button>
         </div>
       </header>
 
-      <section class="card record-bar">
-        <label>
+      <!-- Selector de registre -->
+      <div class="record-bar card">
+        <label class="record-label">
           Registre
           <select id="recordSelect"></select>
         </label>
-      </section>
+      </div>
 
-      <section class="card">
+      <!-- Formulari dinàmic -->
+      <div class="form-wrap card">
         <form id="configForm" class="form-grid"></form>
-      </section>
+      </div>
 
-      <footer class="footer-actions">
-        <button id="saveBtn" type="button">Save All</button>
+      <!-- Peu -->
+      <footer class="page-footer">
+        <p id="status" class="status-msg"></p>
+        <button id="saveBtn" type="button" class="btn-primary">Save All</button>
       </footer>
-      <p id="status"></p>
+
     </section>
   </main>
 
   <script src="app.js"></script>
 </body>
 </html>
-
