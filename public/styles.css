@@ -1,10 +1,10 @@
 ﻿:root {
-  --bg: #f4f6fb;
-  --card: #ffffff;
-  --text: #1f2937;
-  --muted: #6b7280;
-  --border: #d1d5db;
-  --accent: #0f766e;
+  --bg: #efefef;
+  --card: #f3f3f3;
+  --text: #171717;
+  --muted: #595959;
+  --border: #cfcfcf;
+  --accent: #3b6ee8;
   --danger: #b91c1c;
 }
 * { box-sizing: border-box; }
@@ -12,39 +12,145 @@ body {
   margin: 0;
   font-family: Segoe UI, Arial, sans-serif;
   color: var(--text);
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  background: var(--bg);
 }
-.app-shell { max-width: 1100px; margin: 24px auto; padding: 0 12px; }
+.app-shell { max-width: 980px; margin: 6px auto; padding: 0 8px 20px; }
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 6px;
+  padding: 10px;
 }
 .hidden { display: none; }
-label { display: block; margin-bottom: 12px; }
+label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 600; }
 input, select, textarea {
   width: 100%;
-  margin-top: 6px;
+  margin-top: 4px;
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 2px;
+  padding: 5px 7px;
+  background: #f6f6f6;
+  font-size: 11px;
 }
 button {
   border: 0;
   background: var(--accent);
   color: #fff;
-  border-radius: 8px;
-  padding: 10px 14px;
+  border-radius: 2px;
+  padding: 4px 12px;
+  min-width: 92px;
+  font-size: 10px;
+  font-weight: 600;
   cursor: pointer;
 }
-.topbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.app-title { margin-bottom: 8px; }
+.app-title h1 { margin: 0; font-size: 34px; line-height: 1; }
+.topbar { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding-bottom: 6px; }
+.topbar p { margin: 0; font-size: 12px; color: var(--muted); }
 .actions { display: flex; gap: 8px; }
-.form-grid { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 12px; }
-.form-field { border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
-.form-field h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
-textarea { min-height: 120px; }
+.editor-layout > .card { margin-top: 8px; }
+.record-bar { padding-bottom: 4px; }
+
+/* Dynamic form laid out to match section screenshots */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.form-field {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px;
+  background: #f3f3f3;
+  position: relative;
+}
+.form-field h4 {
+  margin: 0 0 6px;
+  font-size: 10px;
+  color: #2d2d2d;
+  font-weight: 700;
+  text-transform: none;
+}
+textarea { min-height: 72px; font-family: Consolas, "Courier New", monospace; }
+.form-field:has([data-field="id"]) { display: none; }
+
+/* Section headers */
+.form-field:has([data-field="env"]) { margin-top: 26px; }
+.form-field:has([data-field="env"])::before,
+.form-field:has([data-field="language_rules"])::before,
+.form-field:has([data-field="llm_get_language"])::before,
+.form-field:has([data-field="json_structured_output_parser_0"])::before,
+.form-field:has([data-field="prompt_system_message_ca"])::before,
+.form-field:has([data-field="user_prompt_templates_ca"])::before,
+.form-field:has([data-field="db_vectorial_collection"])::before,
+.form-field:has([data-field="whatsapp_max_chars"])::before {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -28px;
+  padding: 6px 10px 4px;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: var(--card);
+  font-size: 28px;
+  font-weight: 800;
+  color: #1d1d1d;
+}
+.form-field:has([data-field="env"])::before { content: "Configuracio basica"; }
+.form-field:has([data-field="language_rules"])::before { content: "Deteccio d'idioma"; }
+.form-field:has([data-field="llm_get_language"])::before { content: "Configuracio LLM"; }
+.form-field:has([data-field="json_structured_output_parser_0"])::before { content: "Structured Output Parsers"; }
+.form-field:has([data-field="prompt_system_message_ca"])::before { content: "Prompts de sistema"; }
+.form-field:has([data-field="user_prompt_templates_ca"])::before { content: "Templates d'usuari"; }
+.form-field:has([data-field="db_vectorial_collection"])::before { content: "Vector DB"; }
+.form-field:has([data-field="whatsapp_max_chars"])::before { content: "Configuracio WhatsApp"; }
+
+/* Grid placement by field */
+.form-field:has([data-field="env"]) { grid-column: 1 / 2; }
+.form-field:has([data-field="bot_id"]) { grid-column: 2 / 3; }
+.form-field:has([data-field="created_at"]) { grid-column: 3 / 5; }
+
+.form-field:has([data-field="language_rules"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="language_confidence"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="llm_prompt_language_detector"]) { grid-column: 3 / 5; }
+
+.form-field:has([data-field="llm_get_language"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="llm_get_response"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="llm_get_response_temperature"]) { grid-column: 1 / 2; }
+.form-field:has([data-field="tipus_resposta"]) { grid-column: 2 / 3; }
+.form-field:has([data-field="llm_prompt_return_schema"]) { grid-column: 1 / 5; }
+
+.form-field:has([data-field="json_structured_output_parser_0"]) { grid-column: 1 / 2; }
+.form-field:has([data-field="json_structured_output_parser_1"]) { grid-column: 2 / 3; }
+.form-field:has([data-field="json_structured_output_parser_2"]) { grid-column: 3 / 4; }
+
+.form-field:has([data-field="prompt_system_message_ca"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="prompt_system_message_es"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="prompt_system_message_fr"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="prompt_system_message_en"]) { grid-column: 3 / 5; }
+
+.form-field:has([data-field="user_prompt_templates_ca"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="user_prompt_templates_es"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="user_prompt_templates_fr"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="user_prompt_templates_en"]) { grid-column: 3 / 5; }
+
+.form-field:has([data-field="db_vectorial_collection"]) { grid-column: 1 / 2; }
+.form-field:has([data-field="embeddings_model_name"]) { grid-column: 2 / 4; }
+.form-field:has([data-field="qdrant_top_k"]) { grid-column: 4 / 5; }
+
+.form-field:has([data-field="whatsapp_max_chars"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_send_delay_seconds"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="whatsapp_labels_ca"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_labels_es"]) { grid-column: 3 / 5; }
+.form-field:has([data-field="whatsapp_labels_fr"]) { grid-column: 1 / 3; }
+.form-field:has([data-field="whatsapp_labels_en"]) { grid-column: 3 / 5; }
+
 .error { color: var(--danger); }
-#status { color: var(--muted); }
-.footer-actions { margin-top: 12px; display: flex; justify-content: flex-end; }
-@media (max-width: 860px) { .form-grid { grid-template-columns: 1fr; } }
+#status { color: var(--muted); margin: 8px 0 0; font-size: 11px; }
+.footer-actions { margin-top: 8px; display: flex; justify-content: flex-end; }
+
+@media (max-width: 980px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .form-field { grid-column: 1 / -1 !important; }
+}

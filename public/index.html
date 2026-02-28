@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WhatsAppbot Config v2</title>
+  <title>Configuracio del bot</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
-    <header class="card">
-      <h1>WhatsAppbot Config v2</h1>
-      <p>Panell de configuracio del workflow</p>
+    <header class="card app-title">
+      <h1>Configuracio del bot</h1>
     </header>
 
     <section id="loginCard" class="card">
@@ -33,19 +32,16 @@
       <p id="loginError" class="error"></p>
     </section>
 
-    <section id="editorCard" class="card hidden">
+    <section id="editorCard" class="card hidden editor-layout">
       <header class="topbar">
-        <div>
-          <h2>Workflow Config</h2>
-          <p id="whoami"></p>
-        </div>
+        <p id="whoami"></p>
         <div class="actions">
           <button id="reloadBtn" type="button">Reload</button>
           <button id="logoutBtn" type="button">Logout</button>
         </div>
       </header>
 
-      <section class="card">
+      <section class="card record-bar">
         <label>
           Registre
           <select id="recordSelect"></select>
