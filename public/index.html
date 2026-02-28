@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflow Config Editor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="loginCard" class="card">
+      <h1>Acces a configuracio</h1>
+      <label>Usuari <input id="username" type="text" /></label>
+      <label>Password <input id="password" type="password" /></label>
+      <button id="loginBtn">Login</button>
+      <p id="loginError" class="error"></p>
+    </section>
+
+    <section id="editorCard" class="card hidden">
+      <header class="topbar">
+        <div>
+          <h2>Workflow Config</h2>
+          <p id="whoami"></p>
+        </div>
+        <div class="actions">
+          <button id="reloadBtn">Reload</button>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <div class="row">
+        <label>Registre
+          <select id="recordSelect"></select>
+        </label>
+      </div>
+
+      <form id="configForm" class="form-grid"></form>
+
+      <div class="footer-actions">
+        <button id="saveBtn" type="button">Save</button>
+      </div>
+      <p id="status"></p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
