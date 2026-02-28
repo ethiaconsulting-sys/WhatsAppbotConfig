@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Workflow Config Editor</title>
+  <title>WhatsAppbot Config</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <main class="app-shell">
+    <header class="card">
+      <h1>WhatsAppbot Config</h1>
+      <p>Panell de configuracio del workflow</p>
+    </header>
+
     <section id="loginCard" class="card">
-      <h1>Acces a configuracio</h1>
-      <label>Usuari <input id="username" type="text" /></label>
-      <label>Password <input id="password" type="password" /></label>
-      <button id="loginBtn">Login</button>
+      <header>
+        <h2>Acces a configuracio</h2>
+      </header>
+      <div class="form-grid">
+        <label>
+          Usuari
+          <input id="username" type="text" autocomplete="username" />
+        </label>
+        <label>
+          Password
+          <input id="password" type="password" autocomplete="current-password" />
+        </label>
+      </div>
+      <div class="footer-actions">
+        <button id="loginBtn" type="button">Login</button>
+      </div>
       <p id="loginError" class="error"></p>
     </section>
 
@@ -23,22 +40,25 @@
           <p id="whoami"></p>
         </div>
         <div class="actions">
-          <button id="reloadBtn">Reload</button>
-          <button id="logoutBtn">Logout</button>
+          <button id="reloadBtn" type="button">Reload</button>
+          <button id="logoutBtn" type="button">Logout</button>
         </div>
       </header>
 
-      <div class="row">
-        <label>Registre
+      <section class="card">
+        <label>
+          Registre
           <select id="recordSelect"></select>
         </label>
-      </div>
+      </section>
 
-      <form id="configForm" class="form-grid"></form>
+      <section class="card">
+        <form id="configForm" class="form-grid"></form>
+      </section>
 
-      <div class="footer-actions">
-        <button id="saveBtn" type="button">Save</button>
-      </div>
+      <footer class="footer-actions">
+        <button id="saveBtn" type="button">Save All</button>
+      </footer>
       <p id="status"></p>
     </section>
   </main>
