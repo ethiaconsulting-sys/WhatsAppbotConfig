@@ -1,4 +1,7 @@
-﻿import express from "express";
+﻿import { setDefaultResultOrder } from "dns";
+setDefaultResultOrder("ipv4first");
+
+import express from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
@@ -19,7 +22,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("Missing DATABASE_URL in environment");
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false }, family: 4 });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
 const jsonFields = new Set([
   "language_rules",
