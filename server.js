@@ -19,7 +19,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("Missing DATABASE_URL in environment");
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false }, family: 4 });
 
 const jsonFields = new Set([
   "language_rules",
