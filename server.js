@@ -1,7 +1,4 @@
-﻿import { setDefaultResultOrder } from "dns";
-setDefaultResultOrder("ipv4first");
-
-import express from "express";
+﻿import express from "express";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
