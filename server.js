@@ -15,11 +15,49 @@ const app = express();
 const port = Number(process.env.PORT || 3000);
 const cookieName = process.env.SESSION_COOKIE_NAME || "workflow_session";
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("Missing DATABASE_URL in environment");
+function normalizeDatabaseUrl(connectionString) {
+  const [base, query = ""] = connectionString.split("?", 2);
+  if (!query) return base;
+
+  const filteredQuery = query
+    .split("&")
+    .filter(Boolean)
+    // node-postgres lets ssl params in the URL override the explicit ssl config object.
+    .filter((part) => {
+      const [rawKey = ""] = part.split("=", 1);
+      const key = rawKey.toLowerCase();
+      return !["sslmode", "sslcert", "sslkey", "sslrootcert"].includes(key);
+    })
+    .join("&");
+
+  return filteredQuery ? `${base}?${filteredQuery}` : base;
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+function createPoolConfig() {
+  const common = { ssl: { rejectUnauthorized: false } };
+
+  if (process.env.PGHOST && process.env.PGUSER && process.env.PGPASSWORD) {
+    return {
+      ...common,
+      host: process.env.PGHOST,
+      port: Number(process.env.PGPORT || 5432),
+      database: process.env.PGDATABASE || "postgres",
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD
+    };
+  }
+
+  if (process.env.DATABASE_URL) {
+    return {
+      ...common,
+      connectionString: normalizeDatabaseUrl(process.env.DATABASE_URL)
+    };
+  }
+
+  throw new Error("Missing DATABASE_URL or PGHOST/PGUSER/PGPASSWORD in environment");
+}
+
+const pool = new Pool(createPoolConfig());
 
 const jsonFields = new Set([
   "language_rules",
