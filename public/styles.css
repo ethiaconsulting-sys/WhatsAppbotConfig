@@ -173,10 +173,11 @@ textarea {
 
 /* Prompt textareas — large, readable */
 textarea.textarea-prompt {
-  min-height: 110px;
-  font-size: 12.5px;
-  line-height: 1.6;
+  min-height: 320px;
+  font-size: 13px;
+  line-height: 1.7;
   resize: vertical;
+  padding: 10px 12px;
 }
 
 /* Auto-grow textarea (medium, no JSON) */
@@ -315,7 +316,7 @@ textarea.textarea-auto {
 }
 .editor-body {
   flex: 1;
-  max-width: 1080px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
   padding: 20px 20px 100px;
@@ -365,6 +366,7 @@ textarea.textarea-auto {
   align-items: start;
 }
 .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.prompts-grid { grid-template-columns: minmax(0, 1fr); }
 
 /* Column spans */
 .span-2 { grid-column: span 2; }
