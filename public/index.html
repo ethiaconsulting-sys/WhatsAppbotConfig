@@ -3,344 +3,579 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WhatsApp Bot · Configuració</title>
+  <title>WhatsApp Bot - Configuracio</title>
 
-  <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/eclipse.min.css" />
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<!-- ══════════════════════ LOGIN ══════════════════════ -->
-<div id="loginView" class="login-view">
-  <div class="login-card">
-    <div class="login-logo">⚙</div>
-    <h1 class="login-title">Accés a configuració</h1>
-    <div class="login-fields">
+  <div id="loginView" class="login-view">
+    <form class="login-card" autocomplete="on">
+      <div class="login-mark">WB</div>
+      <h1 class="login-title">Acces a configuracio</h1>
       <label class="field-label">
         Usuari
         <input id="loginUser" type="text" autocomplete="username" placeholder="nom d'usuari" />
       </label>
       <label class="field-label">
         Contrasenya
-        <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" />
+        <input id="loginPass" type="password" autocomplete="current-password" placeholder="********" />
       </label>
-    </div>
-    <button id="loginBtn" class="btn-primary btn-block">Entrar</button>
-    <p id="loginErr" class="error-text"></p>
-  </div>
-</div>
-
-
-<!-- ══════════════════════ EDITOR ══════════════════════ -->
-<div id="editorView" class="editor-view hidden">
-
-  <header class="topbar">
-    <div class="topbar-left">
-      <h1 class="app-title">Configuració del bot</h1>
-    </div>
-    <div class="topbar-right">
-      <span id="whoami" class="user-chip"></span>
-      <button id="reloadBtn" class="btn-ghost">↺&nbsp;Reload</button>
-      <button id="logoutBtn" class="btn-ghost">Logout</button>
-    </div>
-  </header>
-
-  <div class="editor-body">
-
-    <!-- Record selector -->
-    <div class="record-bar card">
-      <label class="field-label">
-        Registre actiu
-        <select id="recordSelect"></select>
-      </label>
-    </div>
-
-    <!-- ─────────────── 1. Configuració bàsica ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Configuració bàsica</h2>
-      <div class="grid cols-4">
-
-        <div class="field">
-          <label class="field-label">Environment
-            <input data-field="env" type="text" />
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Bot ID
-            <input data-field="bot_id" type="text" />
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">Created at
-            <input data-field="created_at" type="text" disabled />
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 2. Detecció d'idioma ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Detecció d'idioma</h2>
-      <div class="grid cols-4">
-
-        <div class="field span-2">
-          <label class="field-label">
-            Language Rules <span class="badge-json">JSON</span>
-            <textarea data-field="language_rules" data-json data-cm-height="185"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2 col-stack">
-          <div class="field">
-            <label class="field-label">Language Confidence (0–1)
-              <input data-field="language_confidence" type="number" step="0.01" min="0" max="1" />
-            </label>
-          </div>
-          <div class="field flex-grow">
-            <label class="field-label">LLM Prompt Language Detector
-              <textarea data-field="llm_prompt_language_detector" class="textarea-auto"></textarea>
-            </label>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 3. Configuració LLM ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Configuració LLM</h2>
-      <div class="grid cols-4">
-
-        <div class="field span-2">
-          <label class="field-label">LLM Get Language
-            <input data-field="llm_get_language" type="text" />
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">LLM Get Response
-            <input data-field="llm_get_response" type="text" />
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Response Temperature
-            <input data-field="llm_get_response_temperature" type="number" step="0.1" min="0" max="2" />
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Tipus Resposta
-            <input data-field="tipus_resposta" type="number" step="1" min="0" />
-          </label>
-        </div>
-
-        <div class="field span-4">
-          <label class="field-label">
-            LLM Prompt Return Schema <span class="badge-json">JSON</span>
-            <textarea data-field="llm_prompt_return_schema" data-json data-cm-height="130"></textarea>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 4. Structured Output Parsers ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Structured Output Parsers</h2>
-      <div class="grid cols-4">
-
-        <div class="field">
-          <label class="field-label">
-            Parser 0 <span class="badge-json">JSON</span>
-            <textarea data-field="json_structured_output_parser_0" data-json data-cm-height="200"></textarea>
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">
-            Parser 1 <span class="badge-json">JSON</span>
-            <textarea data-field="json_structured_output_parser_1" data-json data-cm-height="200"></textarea>
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">
-            Parser 2 <span class="badge-json">JSON</span>
-            <textarea data-field="json_structured_output_parser_2" data-json data-cm-height="200"></textarea>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 5. Prompts de sistema ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Prompts de sistema</h2>
-      <div class="grid prompts-grid">
-
-        <div class="field">
-          <label class="field-label">Prompt System (CA)
-            <textarea data-field="prompt_system_message_ca" class="textarea-prompt"></textarea>
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Prompt System (ES)
-            <textarea data-field="prompt_system_message_es" class="textarea-prompt"></textarea>
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Prompt System (FR)
-            <textarea data-field="prompt_system_message_fr" class="textarea-prompt"></textarea>
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Prompt System (EN)
-            <textarea data-field="prompt_system_message_en" class="textarea-prompt"></textarea>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 6. Templates d'usuari ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Templates d'usuari</h2>
-      <div class="grid cols-4">
-
-        <div class="field span-2">
-          <label class="field-label">
-            User Prompt Template (CA) <span class="badge-json">JSON</span>
-            <textarea data-field="user_prompt_templates_ca" data-json data-cm-height="160"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            User Prompt Template (ES) <span class="badge-json">JSON</span>
-            <textarea data-field="user_prompt_templates_es" data-json data-cm-height="160"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            User Prompt Template (FR) <span class="badge-json">JSON</span>
-            <textarea data-field="user_prompt_templates_fr" data-json data-cm-height="160"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            User Prompt Template (EN) <span class="badge-json">JSON</span>
-            <textarea data-field="user_prompt_templates_en" data-json data-cm-height="160"></textarea>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 7. Vector DB ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Vector DB</h2>
-      <div class="grid cols-4">
-
-        <div class="field">
-          <label class="field-label">DB Vectorial Collection
-            <input data-field="db_vectorial_collection" type="text" />
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">Embeddings Model Name
-            <input data-field="embeddings_model_name" type="text" />
-          </label>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Qdrant Top K
-            <input data-field="qdrant_top_k" type="number" step="1" min="1" />
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- ─────────────── 8. Configuració WhatsApp ─────────────── -->
-    <section class="config-section card">
-      <h2 class="section-title">Configuració WhatsApp</h2>
-      <div class="grid cols-4">
-
-        <div class="field span-2">
-          <label class="field-label">WhatsApp Max Chars
-            <input data-field="whatsapp_max_chars" type="number" step="1" min="1" />
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">WhatsApp Send Delay (seconds)
-            <input data-field="whatsapp_send_delay_seconds" type="number" step="1" min="0" />
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            WhatsApp Labels (CA) <span class="badge-json">JSON</span>
-            <textarea data-field="whatsapp_labels_ca" data-json data-cm-height="150"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            WhatsApp Labels (ES) <span class="badge-json">JSON</span>
-            <textarea data-field="whatsapp_labels_es" data-json data-cm-height="150"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            WhatsApp Labels (FR) <span class="badge-json">JSON</span>
-            <textarea data-field="whatsapp_labels_fr" data-json data-cm-height="150"></textarea>
-          </label>
-        </div>
-
-        <div class="field span-2">
-          <label class="field-label">
-            WhatsApp Labels (EN) <span class="badge-json">JSON</span>
-            <textarea data-field="whatsapp_labels_en" data-json data-cm-height="150"></textarea>
-          </label>
-        </div>
-
-      </div>
-    </section>
-
-  </div><!-- /editor-body -->
-
-  <!-- Sticky save bar -->
-  <div class="save-bar">
-    <p id="statusMsg" class="status-msg"></p>
-    <button id="saveBtn" class="btn-primary">Desar tots els canvis</button>
+      <button id="loginBtn" class="btn-primary btn-block" type="button">Entrar</button>
+      <p id="loginErr" class="error-text"></p>
+    </form>
   </div>
 
-</div><!-- /editorView -->
+  <div id="editorView" class="editor-view hidden">
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="app-title">Configuracio del bot</h1>
+        <span id="dirtyBadge" class="state-chip">Sense canvis</span>
+      </div>
+      <div class="topbar-right">
+        <label class="compact-select">
+          Registre
+          <select id="recordSelect"></select>
+        </label>
+        <span id="whoami" class="user-chip"></span>
+        <button id="reloadBtn" class="btn-ghost" type="button">Recarregar</button>
+        <button id="logoutBtn" class="btn-ghost" type="button">Sortir</button>
+      </div>
+    </header>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
-<script src="app.js"></script>
+    <div class="workspace">
+      <nav class="sidebar" aria-label="Seccions">
+        <button class="nav-link active" type="button" data-section="identity">Identitat</button>
+        <button class="nav-link" type="button" data-section="response">Resposta IA</button>
+        <button class="nav-link" type="button" data-section="guardrails">Guardrails</button>
+        <button class="nav-link" type="button" data-section="whatsapp">WhatsApp</button>
+        <button class="nav-link" type="button" data-section="connections">Connexions</button>
+        <button class="nav-link" type="button" data-section="advanced">Avancat</button>
+      </nav>
+
+      <main class="content">
+        <section class="config-panel active" data-section-panel="identity">
+          <div class="panel-head">
+            <h2>Identitat</h2>
+          </div>
+          <div class="settings-group">
+            <div class="grid cols-4">
+              <div class="field">
+                <label class="field-label">Environment
+                  <input data-field="env" type="text" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Bot ID
+                  <input data-field="bot_id" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Created at
+                  <input data-field="created_at" type="text" disabled />
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-panel" data-section-panel="response">
+          <div class="panel-head">
+            <h2>Resposta IA</h2>
+          </div>
+
+          <div class="settings-group">
+            <h3>Generacio</h3>
+            <div class="grid cols-4">
+              <div class="field">
+                <label class="field-label">Temperatura
+                  <input data-field="llm_get_response_temperature" type="number" step="0.05" min="0" max="2" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Tipus resposta
+                  <input data-field="tipus_resposta" type="number" step="1" min="0" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Idioma per defecte
+                  <select data-field="workflow_default_language">
+                    <option value="">Sense valor</option>
+                    <option value="ca">CA</option>
+                    <option value="es">ES</option>
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                  </select>
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Confiança idioma
+                  <input data-field="language_confidence" type="number" step="0.01" min="0" max="1" />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <div class="group-toolbar">
+              <h3>Prompts</h3>
+              <div class="tab-list" data-tab-group="responsePrompts">
+                <button class="tab-button active" type="button" data-tab="ca">CA</button>
+                <button class="tab-button" type="button" data-tab="es">ES</button>
+                <button class="tab-button" type="button" data-tab="en">EN</button>
+                <button class="tab-button" type="button" data-tab="fr">FR</button>
+              </div>
+            </div>
+
+            <div class="tab-panel active" data-tab-panel="responsePrompts" data-tab="ca">
+              <div class="grid cols-4">
+                <div class="field span-4">
+                  <label class="field-label">System prompt CA
+                    <textarea data-field="prompt_system_message_ca" class="textarea-prompt"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">User prompt template CA <span class="badge-json">JSON</span>
+                    <textarea data-field="user_prompt_templates_ca" data-json data-cm-height="190"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="responsePrompts" data-tab="es">
+              <div class="grid cols-4">
+                <div class="field span-4">
+                  <label class="field-label">System prompt ES
+                    <textarea data-field="prompt_system_message_es" class="textarea-prompt"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">User prompt template ES <span class="badge-json">JSON</span>
+                    <textarea data-field="user_prompt_templates_es" data-json data-cm-height="190"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="responsePrompts" data-tab="en">
+              <div class="grid cols-4">
+                <div class="field span-4">
+                  <label class="field-label">System prompt EN
+                    <textarea data-field="prompt_system_message_en" class="textarea-prompt"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">User prompt template EN <span class="badge-json">JSON</span>
+                    <textarea data-field="user_prompt_templates_en" data-json data-cm-height="190"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="responsePrompts" data-tab="fr">
+              <div class="grid cols-4">
+                <div class="field span-4">
+                  <label class="field-label">System prompt FR
+                    <textarea data-field="prompt_system_message_fr" class="textarea-prompt"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">User prompt template FR <span class="badge-json">JSON</span>
+                    <textarea data-field="user_prompt_templates_fr" data-json data-cm-height="190"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3>Context RAG i memoria</h3>
+            <div class="grid cols-4">
+              <div class="field span-2">
+                <label class="field-label">Col.leccio vectorial
+                  <input data-field="db_vectorial_collection" type="text" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Qdrant top K
+                  <input data-field="qdrant_top_k" type="number" step="1" min="1" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Finestra conversa
+                  <input data-field="conversation_window" type="number" step="1" min="0" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Model embeddings
+                  <input data-field="embeddings_model_name" type="text" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Edat maxima conversa (h)
+                  <input data-field="conversation_max_age_hours" type="number" step="1" min="0" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Paraules reset
+                  <input data-field="reset_keywords" type="text" />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3>Idioma i format</h3>
+            <div class="grid cols-4">
+              <div class="field span-2">
+                <label class="field-label">Prompt detector idioma
+                  <textarea data-field="llm_prompt_language_detector" class="textarea-auto"></textarea>
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Regles idioma <span class="badge-json">JSON</span>
+                  <textarea data-field="language_rules" data-json data-cm-height="170"></textarea>
+                </label>
+              </div>
+              <div class="field span-4">
+                <label class="field-label">Schema retorn idioma <span class="badge-json">JSON</span>
+                  <textarea data-field="llm_prompt_return_schema" data-json data-cm-height="150"></textarea>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3>Parsers de sortida</h3>
+            <div class="grid cols-3">
+              <div class="field">
+                <label class="field-label">Parser 0 <span class="badge-json">JSON</span>
+                  <textarea data-field="json_structured_output_parser_0" data-json data-cm-height="230"></textarea>
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Parser 1 <span class="badge-json">JSON</span>
+                  <textarea data-field="json_structured_output_parser_1" data-json data-cm-height="230"></textarea>
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Parser 2 <span class="badge-json">JSON</span>
+                  <textarea data-field="json_structured_output_parser_2" data-json data-cm-height="230"></textarea>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-panel" data-section-panel="guardrails">
+          <div class="panel-head">
+            <h2>Guardrails</h2>
+          </div>
+          <div class="settings-group">
+            <h3>Limits</h3>
+            <div class="grid cols-4">
+              <div class="field">
+                <label class="field-label">Maxim input
+                  <input data-field="guardrail_max_input_chars" type="number" step="1" min="0" />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="settings-group">
+            <div class="group-toolbar">
+              <h3>Missatges i patrons</h3>
+              <div class="tab-list" data-tab-group="guardrailLang">
+                <button class="tab-button active" type="button" data-tab="ca">CA</button>
+                <button class="tab-button" type="button" data-tab="es">ES</button>
+                <button class="tab-button" type="button" data-tab="en">EN</button>
+                <button class="tab-button" type="button" data-tab="fr">FR</button>
+              </div>
+            </div>
+
+            <div class="tab-panel active" data-tab-panel="guardrailLang" data-tab="ca">
+              <div class="grid cols-4">
+                <div class="field span-2">
+                  <label class="field-label">Resposta bloqueig CA
+                    <textarea data-field="guardrail_blocked_ca" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Salutacio CA
+                    <textarea data-field="guardrail_greeting_ca" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">Usuari no autoritzat CA
+                    <textarea data-field="no_authorized_usr_ca" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Injeccio prompt CA <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_injection_ca" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Abus CA <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_abuse_ca" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="guardrailLang" data-tab="es">
+              <div class="grid cols-4">
+                <div class="field span-2">
+                  <label class="field-label">Resposta bloqueig ES
+                    <textarea data-field="guardrail_blocked_es" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Salutacio ES
+                    <textarea data-field="guardrail_greeting_es" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">Usuari no autoritzat ES
+                    <textarea data-field="no_authorized_usr_es" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Injeccio prompt ES <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_injection_es" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Abus ES <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_abuse_es" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="guardrailLang" data-tab="en">
+              <div class="grid cols-4">
+                <div class="field span-2">
+                  <label class="field-label">Resposta bloqueig EN
+                    <textarea data-field="guardrail_blocked_en" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Salutacio EN
+                    <textarea data-field="guardrail_greeting_en" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">Usuari no autoritzat EN
+                    <textarea data-field="no_authorized_usr_en" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Injeccio prompt EN <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_injection_en" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Abus EN <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_abuse_en" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-panel" data-tab-panel="guardrailLang" data-tab="fr">
+              <div class="grid cols-4">
+                <div class="field span-2">
+                  <label class="field-label">Resposta bloqueig FR
+                    <textarea data-field="guardrail_blocked_fr" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Salutacio FR
+                    <textarea data-field="guardrail_greeting_fr" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-4">
+                  <label class="field-label">Usuari no autoritzat FR
+                    <textarea data-field="no_authorized_usr_fr" class="textarea-auto"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Injeccio prompt FR <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_injection_fr" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+                <div class="field span-2">
+                  <label class="field-label">Abus FR <span class="badge-json">JSON</span>
+                    <textarea data-field="guardrail_abuse_fr" data-json data-cm-height="150"></textarea>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-panel" data-section-panel="whatsapp">
+          <div class="panel-head">
+            <h2>WhatsApp</h2>
+          </div>
+          <div class="settings-group">
+            <h3>Entrega</h3>
+            <div class="grid cols-4">
+              <div class="field">
+                <label class="field-label">Maxim caracters
+                  <input data-field="whatsapp_max_chars" type="number" step="1" min="1" />
+                </label>
+              </div>
+              <div class="field">
+                <label class="field-label">Delay enviament (s)
+                  <input data-field="whatsapp_send_delay_seconds" type="number" step="1" min="0" />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="settings-group">
+            <div class="group-toolbar">
+              <h3>Labels</h3>
+              <div class="tab-list" data-tab-group="whatsappLabels">
+                <button class="tab-button active" type="button" data-tab="ca">CA</button>
+                <button class="tab-button" type="button" data-tab="es">ES</button>
+                <button class="tab-button" type="button" data-tab="en">EN</button>
+                <button class="tab-button" type="button" data-tab="fr">FR</button>
+              </div>
+            </div>
+            <div class="tab-panel active" data-tab-panel="whatsappLabels" data-tab="ca">
+              <label class="field-label">WhatsApp labels CA <span class="badge-json">JSON</span>
+                <textarea data-field="whatsapp_labels_ca" data-json data-cm-height="190"></textarea>
+              </label>
+            </div>
+            <div class="tab-panel" data-tab-panel="whatsappLabels" data-tab="es">
+              <label class="field-label">WhatsApp labels ES <span class="badge-json">JSON</span>
+                <textarea data-field="whatsapp_labels_es" data-json data-cm-height="190"></textarea>
+              </label>
+            </div>
+            <div class="tab-panel" data-tab-panel="whatsappLabels" data-tab="en">
+              <label class="field-label">WhatsApp labels EN <span class="badge-json">JSON</span>
+                <textarea data-field="whatsapp_labels_en" data-json data-cm-height="190"></textarea>
+              </label>
+            </div>
+            <div class="tab-panel" data-tab-panel="whatsappLabels" data-tab="fr">
+              <label class="field-label">WhatsApp labels FR <span class="badge-json">JSON</span>
+                <textarea data-field="whatsapp_labels_fr" data-json data-cm-height="190"></textarea>
+              </label>
+            </div>
+          </div>
+          <div class="settings-group">
+            <h3>Vista previa</h3>
+            <pre id="whatsappPreview" class="preview-box"></pre>
+          </div>
+        </section>
+
+        <section class="config-panel" data-section-panel="connections">
+          <div class="panel-head">
+            <h2>Connexions</h2>
+          </div>
+          <div class="settings-group">
+            <h3>Endpoints</h3>
+            <div class="grid cols-4">
+              <div class="field span-2">
+                <label class="field-label">Supabase URL
+                  <input data-field="supabase_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Twilio URL
+                  <input data-field="twilio_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Groq URL
+                  <input data-field="groq_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Mistral URL
+                  <input data-field="mistral_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Mistral embeddings URL
+                  <input data-field="mistral_embeddings_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">HuggingFace URL
+                  <input data-field="huggingface_url" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Qdrant URL
+                  <input data-field="qdrant_url" type="text" />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="settings-group">
+            <h3>Proveidors i models</h3>
+            <div class="grid cols-4">
+              <div class="field span-2">
+                <label class="field-label">LLM get language
+                  <input data-field="llm_get_language" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">LLM get response
+                  <input data-field="llm_get_response" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Model resposta
+                  <input data-field="llm_model_name" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Model classificador guardrail
+                  <input data-field="guardrail_classifier_model" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Model audio
+                  <input data-field="audio_model_name" type="text" />
+                </label>
+              </div>
+              <div class="field span-2">
+                <label class="field-label">Model imatge
+                  <input data-field="image_model_name" type="text" />
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="config-panel" data-section-panel="advanced">
+          <div class="panel-head">
+            <h2>Avancat</h2>
+          </div>
+          <div class="settings-group">
+            <h3>Canvis pendents</h3>
+            <ul id="changesList" class="changes-list"></ul>
+          </div>
+          <div class="settings-group">
+            <h3>Raw</h3>
+            <textarea id="rawJson" class="raw-json" readonly></textarea>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="save-bar">
+      <p id="statusMsg" class="status-msg"></p>
+      <button id="saveBtn" class="btn-primary" type="button">Desar canvis</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

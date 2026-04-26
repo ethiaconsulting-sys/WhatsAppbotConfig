@@ -72,7 +72,15 @@ const jsonFields = new Set([
   "whatsapp_labels_ca",
   "whatsapp_labels_es",
   "whatsapp_labels_fr",
-  "whatsapp_labels_en"
+  "whatsapp_labels_en",
+  "guardrail_injection_ca",
+  "guardrail_injection_es",
+  "guardrail_injection_en",
+  "guardrail_injection_fr",
+  "guardrail_abuse_ca",
+  "guardrail_abuse_es",
+  "guardrail_abuse_en",
+  "guardrail_abuse_fr"
 ]);
 
 const numericFields = new Set(["language_confidence", "llm_get_response_temperature"]);
@@ -80,7 +88,71 @@ const integerFields = new Set([
   "tipus_resposta",
   "qdrant_top_k",
   "whatsapp_max_chars",
-  "whatsapp_send_delay_seconds"
+  "whatsapp_send_delay_seconds",
+  "guardrail_max_input_chars",
+  "conversation_window",
+  "conversation_max_age_hours"
+]);
+
+const nullableFields = new Set([
+  "language_rules",
+  "llm_prompt_language_detector",
+  "llm_prompt_return_schema",
+  "json_structured_output_parser_0",
+  "json_structured_output_parser_1",
+  "json_structured_output_parser_2",
+  "prompt_system_message_ca",
+  "prompt_system_message_es",
+  "prompt_system_message_fr",
+  "prompt_system_message_en",
+  "user_prompt_templates_ca",
+  "user_prompt_templates_es",
+  "user_prompt_templates_fr",
+  "user_prompt_templates_en",
+  "llm_get_language",
+  "llm_get_response",
+  "db_vectorial_collection",
+  "embeddings_model_name",
+  "whatsapp_labels_ca",
+  "whatsapp_labels_es",
+  "whatsapp_labels_fr",
+  "whatsapp_labels_en",
+  "twilio_url",
+  "groq_url",
+  "mistral_url",
+  "huggingface_url",
+  "supabase_url",
+  "qdrant_url",
+  "mistral_embeddings_url",
+  "audio_model_name",
+  "image_model_name",
+  "llm_model_name",
+  "guardrail_classifier_model",
+  "guardrail_max_input_chars",
+  "guardrail_blocked_ca",
+  "guardrail_blocked_es",
+  "guardrail_blocked_en",
+  "guardrail_blocked_fr",
+  "guardrail_greeting_ca",
+  "guardrail_greeting_es",
+  "guardrail_greeting_en",
+  "guardrail_greeting_fr",
+  "guardrail_injection_ca",
+  "guardrail_injection_es",
+  "guardrail_injection_en",
+  "guardrail_injection_fr",
+  "guardrail_abuse_ca",
+  "guardrail_abuse_es",
+  "guardrail_abuse_en",
+  "guardrail_abuse_fr",
+  "no_authorized_usr_ca",
+  "no_authorized_usr_es",
+  "no_authorized_usr_en",
+  "no_authorized_usr_fr",
+  "workflow_default_language",
+  "conversation_window",
+  "conversation_max_age_hours",
+  "reset_keywords"
 ]);
 
 const editableColumns = [
@@ -113,7 +185,43 @@ const editableColumns = [
   "whatsapp_labels_ca",
   "whatsapp_labels_es",
   "whatsapp_labels_fr",
-  "whatsapp_labels_en"
+  "whatsapp_labels_en",
+  "twilio_url",
+  "groq_url",
+  "mistral_url",
+  "huggingface_url",
+  "supabase_url",
+  "qdrant_url",
+  "mistral_embeddings_url",
+  "audio_model_name",
+  "image_model_name",
+  "llm_model_name",
+  "guardrail_classifier_model",
+  "guardrail_max_input_chars",
+  "guardrail_blocked_ca",
+  "guardrail_blocked_es",
+  "guardrail_blocked_en",
+  "guardrail_blocked_fr",
+  "guardrail_greeting_ca",
+  "guardrail_greeting_es",
+  "guardrail_greeting_en",
+  "guardrail_greeting_fr",
+  "guardrail_injection_ca",
+  "guardrail_injection_es",
+  "guardrail_injection_en",
+  "guardrail_injection_fr",
+  "guardrail_abuse_ca",
+  "guardrail_abuse_es",
+  "guardrail_abuse_en",
+  "guardrail_abuse_fr",
+  "no_authorized_usr_ca",
+  "no_authorized_usr_es",
+  "no_authorized_usr_en",
+  "no_authorized_usr_fr",
+  "workflow_default_language",
+  "conversation_window",
+  "conversation_max_age_hours",
+  "reset_keywords"
 ];
 
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -129,17 +237,38 @@ function parseEditableRow(input) {
     }
     const value = input[col];
     if (jsonFields.has(col)) {
-      row[col] = typeof value === "string" ? JSON.parse(value) : value;
+      if (value === "" || value == null) {
+        if (!nullableFields.has(col)) {
+          throw new Error(`Missing JSON value for ${col}`);
+        }
+        row[col] = null;
+      } else {
+        row[col] = typeof value === "string" ? JSON.parse(value) : value;
+      }
     } else if (numericFields.has(col)) {
+      if (value === "" || value == null) {
+        if (nullableFields.has(col)) {
+          row[col] = null;
+          continue;
+        }
+        throw new Error(`Missing numeric value for ${col}`);
+      }
       const n = Number(value);
       if (Number.isNaN(n)) throw new Error(`Invalid numeric value for ${col}`);
       row[col] = n;
     } else if (integerFields.has(col)) {
+      if (value === "" || value == null) {
+        if (nullableFields.has(col)) {
+          row[col] = null;
+          continue;
+        }
+        throw new Error(`Missing integer value for ${col}`);
+      }
       const n = Number.parseInt(String(value), 10);
       if (Number.isNaN(n)) throw new Error(`Invalid integer value for ${col}`);
       row[col] = n;
     } else {
-      row[col] = value == null ? "" : String(value);
+      row[col] = (value === "" || value == null) && nullableFields.has(col) ? null : String(value);
     }
   }
   return row;
