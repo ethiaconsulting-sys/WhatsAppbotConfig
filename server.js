@@ -243,7 +243,12 @@ function parseEditableRow(input) {
         }
         row[col] = null;
       } else {
-        row[col] = typeof value === "string" ? JSON.parse(value) : value;
+        const parsedJson = typeof value === "string" ? JSON.parse(value) : value;
+        const serializedJson = JSON.stringify(parsedJson);
+        if (serializedJson === undefined) {
+          throw new Error(`Invalid JSON value for ${col}`);
+        }
+        row[col] = serializedJson;
       }
     } else if (numericFields.has(col)) {
       if (value === "" || value == null) {
